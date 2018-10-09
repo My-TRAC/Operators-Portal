@@ -1,0 +1,10 @@
+.git
+.gitignore
+README.md
+.project
+webapp-joan
+debug
+launch.json
+vendor/
+tests/
+glide.lock
