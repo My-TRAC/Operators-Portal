@@ -1,0 +1,31 @@
+version: "3"
+services:
+    mysql_ratingsvisualizer:
+        image: mysql:5.5.59
+        container_name: mysql_ratingsvisualizer
+        environment:
+            MYSQL_ROOT_PASSWORD: confluent
+            MYSQL_USER: confluent
+            MYSQL_PASSWORD: confluent
+            MYSQL_DATABASE: connect_test
+            #        depends_on:
+    ratingsvisualizer:
+        image: sparsitytechnologies/ratingsvisualizer:latest
+        container_name: ratingsvisualizer
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mysql_ratingsvisualizer
+        environment:
+            MS_TO_REFRESH: 10000
+            KAFKA_CONNECT_HOST: kafka-connect
+            SCHEMA_REGISTRY_HOST_NAME: schema-registry
+            MYSQL_USER: confluent
+            MYSQL_HOST: mysql_ratingsvisualizer
+            MYSQL_PASSWORD: confluent
+            MYSQL_DATABASE: connect_test
+            SINK_TOPICS:  "CigoJdbcActivitiesSummary"
+networks:
+    default:
+        external:
+            name: cigo-compose_default
