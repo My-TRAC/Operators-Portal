@@ -20,7 +20,7 @@ var err error
 
 func LoadlibDB() {
 
-	DB.AutoMigrate(&Sample{})
+	//DB.AutoMigrate(&Sample{})
 
 	if strings.ToLower(os.Getenv("FAKE_SAMPLES"))=="true" {
 		samplesStartup()
@@ -82,7 +82,7 @@ func CreateDB() *gorm.DB {
 		fmt.Println("Trying to create a database: " + mysqldb)
 
 		if mErr, ok := err.(*mysql.MySQLError); ok && mErr.Number == 1049 {
-			err = create(mysqluser, mysqlpass, mysqlhost, mysqlport, mysqldb)
+			//err = create(mysqluser, mysqlpass, mysqlhost, mysqlport, mysqldb)
 			if err == nil {
 				db, err = gorm.Open("mysql", mysqlConnect.String())
 				if err != nil {
@@ -136,7 +136,9 @@ func samplesStartup() {
 			i++
 
 			sample := Sample{
-				ID:        RandStringRunes(6),
+				//ID:        RandStringRunes(6),
+				ID:        rand.Uint64(),
+				//id:        rand.Uint64(),
 				NumRatedActivities: rand.Int63n(23),
 				BestRatedActivity:rand.Int63n(22),
 				BestRating: randomFloat64(0,10),

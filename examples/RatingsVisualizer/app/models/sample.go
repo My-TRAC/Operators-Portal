@@ -5,11 +5,11 @@ package models
 
 type Sample struct {
 	//gorm.Model  `valid:"-"`
-	ID	        string  `valid:"-"`
-	Modified   string  `valid:"-"`
-	NumRatedActivities       int64 `valid:"-"`
-	BestRatedActivity		 int64 `valid:"-"`
-	BestRating				float64 `valid:"-"`
+	ID 			   uint64   `sql:"type:bigint PRIMARY KEY`
+	//id                 uint64   `valid:"-"`
+	NumRatedActivities int64   `valid:"-"`
+	BestRatedActivity  int64   `valid:"-"`
+	BestRating         float64 `valid:"-"`
 }
 
 func (Sample) TableName() string{
@@ -23,6 +23,7 @@ func (sample *Sample) Update() error {
 	return DB.Save(&sample).Error
 }
 
+
 func (sample *Sample) Delete() error {
 	return DB.Delete(&sample).Error
 }
@@ -34,6 +35,7 @@ func FindSampleByID(id uint) (Sample, error) {
 }
 
 func FindSamples() ([]Sample, error) {
+
 	var samples []Sample
 	err := DB.Unscoped().Find(&samples).Error
 	return samples, err
