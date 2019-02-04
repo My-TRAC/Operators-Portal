@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratingsvisualizer
+  labels:
+    app: ratingsvisualizer
+spec:
+  type: NodePort
+  ports:
+  - name: "server"
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: ratingsvisualizer
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    app: ratingsvisualizer
+  name: ratingsvisualizer
+spec:
+  serviceName: ratingvisualizer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ratingsvisualizer
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_CONNECT_HOST
+          value: cigo-kafka-connect
+        - name: MS_TO_REFRESH
+          value: "10000"
+        - name: MYSQL_DATABASE
+          value: connect_test
+        - name: MYSQL_HOST
+          value: mysql-ratingsvisualizer
+        - name: MYSQL_PASSWORD
+          value: confluent
+        - name: MYSQL_USER
+          value: confluent
+        - name: SCHEMA_REGISTRY_HOST_NAME
+          value: cigo-schema-registry
+        - name: SINK_TOPICS
+          value: CigoJdbcActivitiesSummary
+        image: sparsitytechnologies/ratingsvisualizer:latest
+        name: ratingsvisualizer
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always

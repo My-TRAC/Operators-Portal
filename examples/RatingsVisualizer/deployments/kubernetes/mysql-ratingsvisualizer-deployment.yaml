@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-ratingsvisualizer
+  labels:
+    app: mysql
+spec:
+  #type: LoadBalancer 
+  ports:
+  - name: "server"
+    port: 3306
+    targetPort: 3306 
+  clusterIP: None
+  selector:
+    app: mysql-ratingsvisualizer 
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    app: mysql-ratingsvisualizer
+  name: mysql-ratingsvisualizer
+spec:
+  serviceName: mysql-ratingsvisualizer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql-ratingsvisualizer
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: confluent
+        - name: MYSQL_USER
+          value: confluent
+        - name: MYSQL_PASSWORD
+          value: confluent
+        - name: MYSQL_DATABASE
+          value: connect_test
+        image: mysql:5.5.59
+        name: mysql-ratingsvisualizer 
+        ports:
+        - containerPort: 3306
+      restartPolicy: Always
