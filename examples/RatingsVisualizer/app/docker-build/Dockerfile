@@ -55,7 +55,7 @@ RUN apt-get install git openssh-client  && \
 
 
 FROM java:8-jre as final
-RUN apt-get update &&  apt-get install -y mysql-client
+RUN apt-get update &&  apt-get install -y mysql-client git
 
 
 WORKDIR /root/

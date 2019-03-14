@@ -55,6 +55,7 @@ spec:
         - name: SINK_TOPICS
           value: CigoJdbcActivitiesSummary
         image: sparsitytechnologies/ratingsvisualizer:latest
+        imagePullPolicy: Always
         name: ratingsvisualizer
         ports:
         - containerPort: 8080
