@@ -1,0 +1,29 @@
+version: "3"
+services:          
+    operators-platform-mysql:
+        image: mysql:5.5.59
+        container_name: operators-platform-mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: confluent
+            MYSQL_USER: confluent
+            MYSQL_PASSWORD: confluent
+            MYSQL_DATABASE: connect_test
+    operators-platform:
+        #image: tomsik68/xampp
+        image: sparsitytechnologies/operatorsportal
+        container_name: operators-platform
+        ports:
+            - "41061:22"
+            - "41062:80"
+              #        volumes:
+              #            - /Users/joan/DAMA/My-TRAC/Operators-Portal/operators_portal/app/src:/www/operators_portal 
+        environment:
+            KAFKA_CONNECT_HOST: kafka-connect
+            SCHEMA_REGISTRY_HOST_NAME: schema-registry
+            MYSQL_HOST: operators-platform-mysql
+            MYSQL_PASSWORD: confluent
+
+networks:
+    default:
+        external:
+            name: cigo-compose_default
