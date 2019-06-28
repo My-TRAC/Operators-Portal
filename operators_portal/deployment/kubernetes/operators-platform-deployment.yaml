@@ -1,0 +1,63 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: operators-platform-ing
+spec:
+  backend:
+    serviceName: operators-platform
+    servicePort: 41062
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: operators-platform
+  labels:
+    app: operators-platform
+spec:
+  type: NodePort
+  ports:
+  - name: "server"
+    port: 41062
+    targetPort: 80
+  selector:
+    app: operators-platform
+--- 
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+  labels: 
+    app: operators-platform
+  name: operators-platform
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: operators-platform
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_CONNECT_HOST
+          value: cigo-kafka-connect
+        - name: MYSQL_DATABASE
+          value: connect_test
+        - name: MYSQL_HOST
+          value: operators-platform-mysql
+        - name: MYSQL_PASSWORD
+          value: confluent
+        - name: MYSQL_USER
+          value: confluent
+        - name: SCHEMA_REGISTRY_HOST_NAME
+          value: cigo-schema-registry
+        image: sparsitytechnologies/operatorsportal:latest
+        imagePullPolicy: Always
+        name: operators-platform
+        ports:
+        - containerPort: 80
+        readinessProbe:
+            httpGet: 
+                path: /www/operators_portal/ 
+                port: 80
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+      restartPolicy: Always

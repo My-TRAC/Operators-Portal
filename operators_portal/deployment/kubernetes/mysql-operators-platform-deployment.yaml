@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: operators-platform-mysql
+  labels:
+    app: operators-platform-mysql
+spec:
+  #type: LoadBalancer 
+  ports:
+  - name: "server"
+    port: 3306
+    targetPort: 3306 
+  clusterIP: None
+  selector:
+    app: operators-platform-mysql 
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    app: operators-platform-mysql
+  name: operators-platform-mysql
+spec:
+  serviceName: operators-platform-mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: operators-platform-mysql
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: confluent
+        - name: MYSQL_USER
+          value: confluent
+        - name: MYSQL_PASSWORD
+          value: confluent
+        - name: MYSQL_DATABASE
+          value: connect_test
+        image: mysql:5.5.59
+        name: operators-platform-mysql 
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+          - name: data 
+            mountPath: /var/lib/mysql
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: "standard"
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi
