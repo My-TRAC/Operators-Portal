@@ -1,7 +1,7 @@
 version: "3"
 services:
     mysql_ratingsvisualizer:
-        image: mysql:5.5.59
+        image: mysql:5.7
         container_name: mysql_ratingsvisualizer
         environment:
             MYSQL_ROOT_PASSWORD: confluent
