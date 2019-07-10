@@ -41,6 +41,8 @@ spec:
         - name: MYSQL_DATABASE
           value: connect_test
         image: mysql:5.7
+        args:
+            - "--ignore-db-dir=lost+found"
         name: mysql-ratingsvisualizer 
         ports:
         - containerPort: 3306
