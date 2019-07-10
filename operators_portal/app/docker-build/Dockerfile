@@ -1,6 +1,8 @@
 FROM debian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
+RUN sed -i '/jessie-updates/d' /etc/apt/sources.list  # Now archived
+
 RUN apt-get update --fix-missing
 
 # curl is needed to download the xampp installer, net-tools provides netstat command for xampp
