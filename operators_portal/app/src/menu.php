@@ -16,7 +16,10 @@ function oper_menu($site_directions) {
         </div>
         <div class="col-md-2 menu-item">
             <a href ="<?php echo $site_directions->link_generator("login"); ?>">Login</a>
-        </div> 
+        </div>
+        <div class="col-md-2 menu-item">
+            <a href ="<?php echo $site_directions->link_generator("signup"); ?>">Sign up</a>
+        </div>
     </div>
 <?php
     // Apart from the basic resourses, we load the resources regarding the menu creation

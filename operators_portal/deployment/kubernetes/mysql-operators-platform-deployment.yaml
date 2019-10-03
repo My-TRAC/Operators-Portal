@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-ratingsvisualizer
+  name: operators-platform-mysql
   labels:
-    app: mysql
+    app: operators-platform-mysql
 spec:
   #type: LoadBalancer 
   ports:
@@ -12,7 +12,7 @@ spec:
     targetPort: 3306 
   clusterIP: None
   selector:
-    app: mysql-ratingsvisualizer 
+    app: operators-platform-mysql 
 status:
   loadBalancer: {}
 ---
@@ -20,15 +20,15 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   labels:
-    app: mysql-ratingsvisualizer
-  name: mysql-ratingsvisualizer
+    app: operators-platform-mysql
+  name: operators-platform-mysql
 spec:
-  serviceName: mysql-ratingsvisualizer
+  serviceName: operators-platform-mysql
   replicas: 1
   template:
     metadata:
       labels:
-        app: mysql-ratingsvisualizer
+        app: operators-platform-mysql
     spec:
       containers:
       - env:
@@ -43,7 +43,7 @@ spec:
         image: mysql:5.7
         args:
             - "--ignore-db-dir=lost+found"
-        name: mysql-ratingsvisualizer 
+        name: operators-platform-mysql 
         ports:
         - containerPort: 3306
         volumeMounts:

@@ -51,12 +51,31 @@ class user_data_class {
      * @return boolean  Will be false if the username does not exist
      */
     public function username_exists($user_data) {
+
+        $handler ="";
+
+        if( is_null($this->database_handler) ) {
+            $cookies_handler = new cookies_handling_class();
+            $this->database_handler = new db_com_class($cookies_handler);
+        }
+
+
+        if( is_null($this->database_handler) )
+            $handler = "null\n";
+        else $handler ="not null \n";
+
+        $file = 'joanguiLog.txt';
+        $current = file_get_contents($file);
+        $current .= "Database handler: ".$handler;
+        file_put_contents($file, $current);
+
         $result = $this->database_handler->select_data("username", "user_data", "username='" . $user_data['username'] . "' AND deleted = 0");
         
         // If what the db returns is not empty, then the username exists
         if (!is_null($result)) {
             return TRUE; 
-        } 
+        }
+
         return FALSE;
     }
     

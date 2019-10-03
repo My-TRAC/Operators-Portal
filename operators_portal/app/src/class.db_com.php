@@ -27,11 +27,22 @@ class db_com_class {
     */
     function __construct($cookies_handler) {
 
+
+
+
+
             // Database variables
-            $sn = "localhost";      // server name
-            $un = "root";           // user name
-            $ps = "";               // password
-            $dbn = "operators_platform";     // database name
+        #    $sn = "operators-portal-mysql";      // server name
+        #    $un = "root";           // user name
+        #    $ps = "confluent";               // password
+        #    $dbn = "connect_test";     // database name
+
+
+        $sn = getenv("MYSQL_HOST");#[,false]);#"operators-portal-mysql";      // server name
+        $un = "root";           // user name
+        $ps = getenv("MYSQL_PASSWORD");#"confluent";               // password
+        $dbn = "connect_test";     // database name
+
 
             $this->db_credentials = array($sn, $un, $ps, $dbn);
 
@@ -84,6 +95,12 @@ class db_com_class {
         }
         
         // Send the query
+
+        $file = 'joanguiLog.txt';
+        $current = file_get_contents($file);
+        $current .= "Update String: ".$search_string."\n";
+        file_put_contents($file, $current);
+
         $result = $this->connection->query($search_string);
         $rows = []; // create a variable to hold the information
 
@@ -123,8 +140,19 @@ class db_com_class {
     *   (depending on $return_id value)
     */
     public function insert_data($table, $columns, $insert_values, $return_id = FALSE){
+
+        print "CACA";
+
         $insert_string = "INSERT INTO " . $table . " ( " . $columns . " ) " . " VALUES (" . $insert_values . " )";
+
+        print $insert_string;
+        $file = 'joanguiLog.txt';
+        $current = file_get_contents($file);
+        $current .= "Insert String: ".$insert_string."\n";
+        file_put_contents($file, $current);
+
         // Send the query
+
         $result = $this->connection->query($insert_string);
         
         // Check if we need the primary key back
@@ -145,6 +173,15 @@ class db_com_class {
     */
     public function update_data($table, $updated_values, $username){
         $update_string = "UPDATE " . $table . " SET " . $updated_values . " WHERE username = '". $username . "'";
+
+
+        $file = 'joanguiLog.txt';
+        $current = file_get_contents($file);
+        $current .= "Update String: ".$update_string."\n";;
+        file_put_contents($file, $current);
+
+
+
         // Send the query
         $result = $this->connection->query($update_string);
         return $result;

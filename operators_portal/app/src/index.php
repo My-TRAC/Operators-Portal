@@ -19,6 +19,7 @@ require_once('menu.php');
 // Instantiate the classes
 $cookies_handler = new cookies_handling_class();
 $database_handler = new db_com_class($cookies_handler);
+$database_handler = null;
 $user_data_handler = new user_data_class($database_handler, $cookies_handler);
 $error_handler = new error_handling_class($cookies_handler);
 $site_directions = new site_directions_class($database_handler, $error_handler, $cookies_handler, $user_data_handler);

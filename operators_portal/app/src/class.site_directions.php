@@ -101,7 +101,7 @@ class site_directions_class {
   
             if ($outcome["error"]) {
                 $this->error_handling_class->save_error_to_cookie('user_signup', $outcome['error_identifier']);
-                $this->force_redirect = 'signup';
+                $this->force_redirect = 'index.php?page_title=signup';
             } else {
                 $username = $this->user_data_handler->get_username();
                 $this->results = $outcome['query_result'];
@@ -114,10 +114,10 @@ class site_directions_class {
             
             if ($outcome["error"]) {
                 $this->error_handling_class->save_error_to_cookie('user_login', $outcome['error_identifier']);
-                $this->force_redirect = 'login';
+                $this->force_redirect = 'index.php?page_title=login';
             } else {
                 $username = $this->user_data_handler->get_username();
-                $this->force_redirect = 'profile';
+                $this->force_redirect = 'index.php?page_title=profile';
             }
             
         }
@@ -131,15 +131,19 @@ class site_directions_class {
      * @return string                       The link in string format
      */
     public function link_generator($page_identifier) {
+        $root= "http://$_SERVER[HTTP_HOST]/www/";
+        //print $root;
+        
         if ($page_identifier == 'home') {
-            return 'http://' . $_SERVER['SERVER_NAME'] . '/operators_portal/';
+           $page=   'operators_portal/index.php';
         } elseif ($page_identifier == 'login') {
-            return 'http://' . $_SERVER['SERVER_NAME'] . '/operators_portal/' . 'login';
+            $page=   'operators_portal/index.php?page_title=login';
         } elseif ($page_identifier == 'about') {
-            return 'http://' . $_SERVER['SERVER_NAME'] . '/operators_portal/' . 'about';
+            $page=   'operators_portal/index.php?page_title=about';
         } elseif ($page_identifier == 'signup') {
-            return 'http://' . $_SERVER['SERVER_NAME'] . '/operators_portal/' . 'signup';
+            $page=   'operators_portal/index.php?page_title=signup';
         }
+        return $root.$page;
     }
     
     /**
